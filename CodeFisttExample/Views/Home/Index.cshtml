@@ -1,0 +1,527 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+<div class="container">
+
+
+
+    <div class="row">
+        <h1 class="h1">Expenses</h1>
+        <p>Select an Expense from the listing to edit  or click Add  to create a new expense</p>
+
+    </div>
+   
+        <div class="row" id="Search">
+            <div class="col-md-6">
+                <h2>Code First Example MVC Project with AJAX</h2>
+                    <div class="col-md-6">
+                        <button type="button" id="btnAdd" class="btn btn-success" data-toggle="modal" data-target="#addExpense"> Add</button>
+                     </div>
+            </div>
+        </div>
+    <div class="row" id="content">
+            <br />
+            <div style="width:90%; margin:0 auto;">
+                <table id="tblExpenses" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ExpenseId</th>
+                            <th>Customer</th>
+                            <th>Project</th>
+                            <th>Amount</th>
+                            <th>Delete</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenseData">
+
+                    </tbody>
+                    <tfoot id="expenseSum">
+                      
+                    </tfoot>
+
+                </table>
+            </div>
+        
+    </div>
+
+
+    <div class="modal fade" id="addExpense" tabindex="-1" role="dialog" aria-labelledby="addExpense" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">Expense Add</h2>
+                    <p>Enter the detail for the expense and click save</p>
+                </div>
+                <div class="modal-body">
+
+                    
+                    <div class="form-group" >
+                     <label for="myDatePicker">Date:</label>
+                     <input type="date" id="myDatePicker" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ddlCustomer">Select Customer</label>
+                        <select class="form-control" id="ddlCustomer">
+                       
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ddlProvider">Select Project</label>
+                        <select class="form-control" id="ddlProvider">
+                        
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtName">Name</label>
+                        <input class="form-control" id="txtName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="txtAmount">Amount</label>
+                        <input class="form-control" id="txtAmount" />
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDescription">Description</label>
+                        <textarea class="form-control" id="txtDescription" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnSave">Save</button>
+                    <button type="button" id="btnSaveAdd" class="btn btn-default">Save and Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editExpense" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="addExpense" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">Expense Edit</h2>
+                    <span id="ExpenseId"></span>
+                    <p>Enter the detail for the expense and click save</p>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="form-group">
+                        <label for="meDatePicker">Date:</label>
+                        <input type="text" id="meDatePicker" readonly="readonly" class="form-control disabled" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ddleCustomer">Select Customer</label>
+                        <select class="form-control" id="ddleCustomer">
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ddleProvider">Select Project</label>
+                        <select class="form-control" id="ddleProvider">
+                          
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="txteName">Name</label>
+                        <input class="form-control" id="txteName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="txteAmount">Amount</label>
+                        <input class="form-control" id="txteAmount" />
+                    </div>
+                    <div class="form-group">
+                        <label for="txteDescription">Description</label>
+                        <textarea class="form-control" id="txteDescription" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="btnSaveUpdate">Save</button>
+                    <button type="button" id="btnUpdate" class="btn btn-default">Update</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+    <div class="modal fade" id="removeExpense" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="removeExpense" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Expense Delete</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want delete the expense record?</p>
+                    <span id="dExpenseId"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnDelExpense" class="btn btn-danger">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.jqueryui.min.css" />
+    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet" />
+
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script>  
+    
+    <script type="text/javascript">
+
+       
+
+        $(document).ready(function () {
+
+           
+
+            $.getJSON("/Customers/LoadCustomers")
+                .done(function (data) {
+                    $.each(data, function (key, item) {
+                        for (var i = 0; i < item.length; i++) {
+                            $('#ddlCustomer')
+                                .append($("<option></option>")
+                                    .attr("value", item[i].Id)
+                                    .text(item[i].Name + ' ' + item[i].LastName));
+                        }
+
+                    });
+
+                });
+
+            $.getJSON("/Customers/LoadCustomers")
+             .done(function (data) {
+                 $.each(data, function (key, item) {
+                     for (var i = 0; i < item.length; i++) {
+                         $('#ddleCustomer')
+                             .append($("<option></option>")
+                                 .attr("value", item[i].Id)
+                                 .text(item[i].Name + ' ' + item[i].LastName));
+                     }
+
+                 });
+
+             });
+
+            //Get Default Projects
+
+            $.getJSON("/Projects/GetProjectsFor?custId=1")
+                .done(function (data) {
+                    // On success, 'data' contains a list of Projects for Customer
+                    $.each(data, function (key, item) {
+                        for (var i = 0; i < item.length; i++) {
+                            // Add a list of Projects
+                            $('#ddlProvider')
+                                .append($("<option></option>")
+                                    .attr("value", item[i].ProjectId)
+                                    .text(item[i].Name));
+                        }
+
+                    });
+                });
+
+
+            $.getJSON("/Projects/GetProjectsFor?custId=1")
+               .done(function (data) {
+                   // On success, 'data' contains a list of Projects for Customer
+                   $.each(data, function (key, item) {
+                       for (var i = 0; i < item.length; i++) {
+                           // Add a list of Projects
+                           $('#ddleProvider')
+                               .append($("<option></option>")
+                                   .attr("value", item[i].ProjectId)
+                                   .text(item[i].Name));
+                       }
+
+                   });
+               });
+
+          
+            // load data
+         LoadGrid();
+            
+         
+
+        });
+
+       
+        function LoadGrid() {
+            var trHTML = '';
+            var tfoot = ''
+            var Amount = 0;
+            var n
+            $.getJSON("/Expense/LoadData")
+                  .done(function (data) {
+                      // On success, 'data' contains a list of Projects for Customer
+                      
+                      $.each(data, function (key, item) {
+                          for (var i = 0; i < item.length; i++) {
+                              var eAmount = item[i].Amout.toFixed(2);
+                              trHTML += '<tr>';
+                              trHTML += '<td>' + item[i].ExpenseId + '</td>';
+                              trHTML += '<td>' + item[i].Name + '</td>';
+                              trHTML += '<td>' + item[i].ProjectName + '</td>';
+                              trHTML += '<td>$' + eAmount + '</td>';
+                              trHTML += '<td><a class="btn btn-info" data-toggle="modal" href="#editExpense" data-expenseid="' + item[i].ExpenseId + '">Edit</a></td>';
+                              trHTML += '<td><a class="btn btn-danger" data-toggle="modal" href="#removeExpense"  data-deleteexpense="' + item[i].ExpenseId + '">Delete</a></td>';
+                              trHTML += '</tr>';
+
+                              Amount = parseInt(Amount) + parseInt(item[i].Amout);
+                           
+                          }
+
+                      });
+
+
+                     
+                      var n = Amount.toFixed(2);
+
+                      tfoot += '<tr>';
+                      tfoot += '<td></td>';
+                      tfoot += '<td></td>';
+                      tfoot += '<td>Total:</td>';
+                      tfoot += '<td> $'+ n +'</td>';
+                      tfoot += '<td></td>';
+                      tfoot += '<td></td>';
+                      tfoot += '</tr>';
+
+                      $('#expenseData').append(trHTML);
+                      $('#expenseSum').append(tfoot);
+                      $('#tblExpenses').dataTable({
+                          "pageLength": 50,
+                      });
+                 
+                  });
+
+        }
+
+     
+
+        $('#removeExpense').on('shown.bs.modal', function (event) {
+
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var deleteId = button.data('deleteexpense');  // gets the Registration Number
+          //get data-id attribute of the clicked element
+
+          //populate the textbox
+          var modal = $(this)
+          modal.find('#dExpenseId').text(deleteId)
+
+      });
+
+      $('#editExpense').on('shown.bs.modal', function (event) {
+
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var ExpenseId = button.data('expenseid');  // gets the Registration Number
+                //get data-id attribute of the clicked element
+
+                //populate the textbox
+                var modal = $(this)
+                modal.find('#ExpenseId').text(ExpenseId)
+
+                // get the data for the particular expense ID:
+                $.getJSON("/Expense/GetExpenseBy?id=" + ExpenseId)
+                    .done(function (data) {
+                        $.each(data, function (key, item) {
+                            var dt = new Date(parseInt(item.ExpenseDate.substr(6)));
+
+                            $("#meDatePicker").val(dt.toDateString());
+                            $("select#ddleCustomer option")
+                              .each(function () { this.selected = (this.text == item.Name); });
+                            //$("#ddleCustomer").text(item.Name);
+                            $("#ddleProvider").val(item.ProjectId);
+                            $("#txteName").val(item.ExpenseName);
+                            $("#txteAmount").val(item.Amout);
+                            $("#txteDescription").val(item.Description);
+                        });
+                    });
+
+      });
+
+      $('#editExpense').on('hidden.bs.modal', function (event) {
+          RefreshGrid();
+      });
+
+      $("#addExpense").on("hidden.bs.modal", function () {
+          RefreshGrid();
+      });
+
+      $('#removeExpense').on("hidden.bs.modal", function () {
+          RefreshGrid();
+      });
+
+      $("#ddlCustomer").change(function () {
+                $("[id*=ddlProvider] option").remove();
+                var CustomerId = $(this).val();
+                find(CustomerId);   // call the find option
+
+            });
+
+      $("#ddleCustomer").change(function () {
+                $("[id*=ddleProvider] option").remove();
+                var CustomerId = $(this).val();
+                finde(CustomerId);   // call the find option
+            })
+
+      function find(CustomerId) {
+            
+                // get the data into the drop down
+                $.getJSON("/Projects/GetProjectsFor?custId=" + CustomerId)
+                    .done(function (data) {
+                        $.each(data, function (key, item) {
+                            for (var i = 0; i < item.length; i++) {
+                                $("#ddlProvider").append($("<option></option>")
+                                    .attr("value", item[i].ProjectId)
+                                    .text(item[i].Name));
+                            }
+                        });
+                    })
+                    .fail(function (jqXHR, textStatus, err) {
+                        $('#ddlProvider').text('Error: ' + err);
+                    });
+            }
+
+      function finde(CustomerId) {
+
+                // get the data into the drop down
+                $.getJSON("/Projects/GetProjectsFor?custId=" + CustomerId)
+                    .done(function (data) {
+                        $.each(data, function (key, item) {
+                            for (var i = 0; i < item.length; i++) {
+                                $("#ddleProvider").append($("<option></option>")
+                                    .attr("value", item[i].ProjectId)
+                                    .text(item[i].Name));
+                            }
+                        });
+                    })
+                    .fail(function (jqXHR, textStatus, err) {
+                        $('#ddleProvider').text('Error: ' + err);
+                    });
+            }
+
+      $('#btnSave').click(function () {
+                SaveExpense();
+                $('#addExpense').modal('hide');
+       });
+
+
+      $('#btnSaveAdd').click(function () {
+
+                SaveExpense();
+       
+                $('#ddlCustomer').val(1);
+                $('#ddlProvider').val(1);
+                $('#txtName').val('');
+                $('#txtAmount').val('');
+                $('#txtDescription').val('');
+                $('#myDatePicker').val('')
+
+            });
+
+      function SaveExpense() {
+                $.ajax(
+                  {
+                      type: "POST", //HTTP POST Method  
+                      url: "/Expense/SaveExpense", // Controller/View   
+                      data: { //Passing data  
+                          Name: $("#ddlCustomer option:selected").text(), //Reading text box values using Jquery   
+                          ExpenseDate: $("#myDatePicker").val(),
+                          ExpenseName: $("#txtName").val(),
+                          Amout: $("#txtAmount").val(),
+                          Description: $("#txtDescription").val(),
+                          ProjectId: $("#ddlProvider").val()
+                      }
+                  });
+
+            }
+
+       $('#btnUpdate').click(function () {
+
+                $.ajax({
+                    type: "POST", //HTTP POST Method  
+                    url: "/Expense/EditExpense", // Controller/View   
+                    data: { //Passing data   
+                        ExpenseId: $("#ExpenseId").text(),
+                        Name: $("#ddleCustomer option:selected").text(), //Reading text box values using Jquery   
+                        ExpenseDate: $("#meDatePicker").val(),
+                        ExpenseName: $("#txteName").val(),
+                        Amout: $("#txteAmount").val(),
+                        Description: $("#txteDescription").val(),
+                        ProjectId: $("#ddleProvider").val()
+                    }
+                });  
+         
+            });
+          
+
+       $('#btnDelExpense').click(function () {
+           var ExpenseId = $('#dExpenseId').text();
+           $.ajax({
+               type: "POST",
+               url: "/Expense/Delete",
+               data: { id: ExpenseId }
+           });
+
+           $('#removeExpense').modal('hide');
+ 
+       });
+
+
+       function RefreshGrid() {
+           $('#tblExpenses tbody > tr').remove();
+           $('#tblExpenses tfoot > tr').remove();
+           var trHTML = '';
+           var tfoot = ''
+           var Amount = 0;
+           $.getJSON("/Expense/LoadData")
+                 .done(function (data) {
+                     // On success, 'data' contains a list of Projects for Customer
+
+                     $.each(data, function (key, item) {
+                         for (var i = 0; i < item.length; i++) {
+                             var eAmount = item[i].Amout.toFixed(2);
+                             trHTML += '<tr>';
+                             trHTML += '<td>' + item[i].ExpenseId + '</td>';
+                             trHTML += '<td>' + item[i].Name + '</td>';
+                             trHTML += '<td>' + item[i].ProjectName + '</td>';
+                             trHTML += '<td>' + eAmount + '</td>';
+                             trHTML += '<td><a class="btn btn-info" data-toggle="modal" href="#editExpense" data-expenseid="' + item[i].ExpenseId + '">Edit</a></td>';
+                             trHTML += '<td><a href="#deleteModal" data-toggle="modal" class="btn btn-danger" data-deleteexpense="' + item[i].ExpenseId + '">Delete</a></td>';
+                             trHTML += '</tr>';
+                         }
+                     });
+
+                     var n = Amount.toFixed(2);
+
+                     tfoot += '<tr>';
+                     tfoot += '<td></td>';
+                     tfoot += '<td></td>';
+                     tfoot += '<td>Total:</td>';
+                     tfoot += '<td> $' + n + '</td>';
+                     tfoot += '<td></td>';
+                     tfoot += '<td></td>';
+                     tfoot += '</tr>';
+
+                     $('#expenseData').append(trHTML);
+                     $('#expenseSum').append(tfoot);
+
+                 });
+       }
+
+
+    </script>
+
+
+</div>
